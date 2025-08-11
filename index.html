@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Duck Hunt — HTML5 Canvas</title>
+  <style>
+    :root{
+      --ui-bg:#0e1116; /* slate/ink */
+      --ui-panel:#161b22;
+      --ui-acc:#22d3ee; /* cyan */
+      --ui-good:#22c55e; /* green */
+      --ui-warn:#f97316; /* orange */
+      --ui-bad:#ef4444;  /* red */
+      --sky-1:#87CEEB;   /* sky blue */
+      --sky-2:#b3e5ff;
+      --ground:#2e7d32;
+      --text:#e6edf3;
+    }
+    html, body { height: 100%; margin: 0; background: var(--ui-bg); color: var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
+    .wrap{ display:flex;flex-direction:column;align-items:center;gap:12px; padding:16px; height:100%; box-sizing:border-box; }
+    header{ width:100%; max-width:1100px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .title{font-weight:700; letter-spacing:.5px}
+    .panel{ background:linear-gradient(180deg, var(--ui-panel), #0b0f14); border:1px solid #273241; border-radius:16px; padding:12px 16px; display:flex; align-items:center; gap:16px; box-shadow: 0 6px 24px rgba(0,0,0,.35); }
+    .stat{display:flex; gap:8px; align-items:center; font-weight:600}
+    .pill{padding:4px 10px; border-radius:999px; border:1px solid #253042; background:#0b1017; font-variant-numeric:tabular-nums}
+    .btn{ background:linear-gradient(180deg, #1f2937, #111827); border:1px solid #2b384a; border-radius:12px; padding:10px 14px; color:var(--text); font-weight:700; letter-spacing:.3px; cursor:pointer; user-select:none; transition: transform .06s ease, box-shadow .2s ease, border-color .2s ease; }
+    .btn:hover{ transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,0,0,.35); border-color:#3b4f6a }
+    .btn:active{ transform: translateY(0) scale(.99)}
+    canvas { width: min(100%, 1100px); aspect-ratio: 16/9; background: #000; border-radius: 16px; border:1px solid #273241; box-shadow: 0 12px 40px rgba(0,0,0,.45); cursor: none; }
+    .help{ width:min(100%,1100px); display:grid; grid-template-columns:1fr; gap:10px; color:#a8b3c6; font-size:.95rem; line-height:1.45; }
+    .kbd{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; background:#0a0f15; border:1px solid #223044; padding:2px 6px; border-radius:6px;}
+    .badge{border:1px solid #2b384a; padding:2px 8px; border-radius:999px; background:#0b1017; font-weight:700}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="panel">
+        <span class="title">🦆 Duck Hunt</span>
+      </div>
+      <div class="panel" id="hud">
+        <div class="stat">Score <span class="pill" id="score">000000</span></div>
+        <div class="stat">Round <span class="pill" id="round">1</span></div>
+        <div class="stat">Ammo <span class="pill" id="ammo">3</span></div>
+        <div class="stat">Ducks <span class="pill" id="ducks">0/0</span></div>
+      </div>
+      <div class="panel">
+        <button id="startBtn" class="btn">▶ Start</button>
+        <button id="stopBtn" class="btn">■ Stop</button>
+      </div>
+    </header>
+
+    <canvas id="game" width="1280" height="720" aria-label="Duck Hunt game canvas"></canvas>
+
+    <section class="help">
+      <div>
+        <span class="badge">How to play</span>
+        Click to shoot. You have <b>3 shells</b> per round. Hit the duck before it escapes off the top. Headshots are worth more.
+      </div>
+      <div>
+        <span class="badge">Pro tip</span>
+        Lead your shot—aim slightly ahead of a fast duck.
+      </div>
+    </section>
+  </div>
+
+<script>
+(() => {
+  /** @type {HTMLCanvasElement} */
+  const canvas = document.getElementById('game');
+  const ctx = canvas.getContext('2d');
+  const scoreEl = document.getElementById('score');
+  const roundEl = document.getElementById('round');
+  const ammoEl  = document.getElementById('ammo');
+  const ducksEl = document.getElementById('ducks');
+  const startBtn = document.getElementById('startBtn');
+  const stopBtn  = document.getElementById('stopBtn');
+
+  // ---------- Audio (WebAudio minimal, no external files) ----------
+  const Audio = (() => {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    const ctx = new AC();
+    function beep(freq=440, dur=0.06, type='square', gain=0.02) {
+      const t0 = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.frequency.value = freq; osc.type = type; g.gain.value = gain;
+      osc.connect(g).connect(ctx.destination);
+      osc.start(t0); osc.stop(t0 + dur);
+    }
+    function shot(){ beep(180, 0.06, 'square', 0.05); beep(120, 0.08, 'square', 0.04); }
+    function hit(){ beep(900, .06, 'square', 0.05); setTimeout(()=>beep(600, .08, 'square', 0.04), 60); }
+    function empty(){ beep(160, .12, 'sawtooth', 0.03); }
+    function escape(){ beep(320, .2, 'triangle', 0.03); }
+    function roundUp(){ [660,880,990].forEach((f,i)=>setTimeout(()=>beep(f,.08,'square',0.04), i*80)); }
+    return { shot, hit, empty, escape, roundUp, ctx };
+  })();
+
+  // ---------- Game state ----------
+  const State = { menu: 'menu', playing: 'playing', roundOver: 'roundOver', gameOver: 'gameOver' };
+  let game = null;
+
+  function newGame(){
+    game = {
+      state: State.menu,
+      score: 0,
+      round: 1,
+      ammo: 3,
+      ducksThisRound: 1,
+      ducksHit: 0,
+      ducksEscaped: 0,
+      ducks: [],
+      cross: { x: canvas.width/2, y: canvas.height/2 },
+      lastTime: performance.now(),
+    };
+    updateHUD();
+  }
+
+  function startRound(){
+    // Scale difficulty by increasing ducks per round (cap at 8).
+    game.ducksThisRound = Math.min(1 + Math.floor((game.round - 1) / 2), 8);
+
+    // Ensure at least one shell per duck (and never less than 3).
+    game.ammo = Math.max(3, game.ducksThisRound);
+
+    game.ducksHit = 0;
+    game.ducksEscaped = 0;
+    game.ducks = [];
+
+    // Spawn all ducks for this round simultaneously.
+    for (let i = 0; i < game.ducksThisRound; i++) {
+      spawnDuck();
+    }
+
+    game.state = State.playing;
+    Audio.roundUp();
+    updateHUD();
+  }
+
+  function endRound(){
+    game.state = State.roundOver;
+    setTimeout(()=>{
+      game.round++;
+      if (game.round > 20) { game.state = State.gameOver; return; }
+      startRound();
+    }, 900);
+  }
+
+function spawnDuck(){
+  const side = Math.random() < 0.5 ? 'left' : 'right';
+  const x = side==='left' ? 60 : canvas.width - 60;
+  const y = canvas.height - 80 - Math.random()*120;
+
+  // Baseline speeds (px/s). Starts easier; ramps with round.
+  const baseHMin = 60 + (game.round-1)*8;   // min horizontal speed magnitude
+  const baseHMax = 140 + (game.round-1)*12; // max horizontal speed magnitude
+  const baseUp   = 110 + (game.round-1)*10; // upward speed magnitude
+
+  // Initial horizontal direction favors inward from the edge
+  const dir = (side==='left'?1:-1) * (Math.random()<0.7?1:-1);
+  const vx0 = dir * (baseHMin + Math.random()*(baseHMax-baseHMin));
+  const vy0 = - (baseUp + Math.random()*40);
+
+  const duck = {
+    x, y,
+    vx: vx0,
+    vy: vy0,
+    baseUp,
+    r: 26,
+    alive: true,
+    shot: false,
+    fallVy: 0,
+    headshotR: 12,
+    wingTime: 0,
+    flapHz: 7 + Math.random()*3,
+    mirror: vx0>=0 ? 1 : -1,
+
+    // Zig-zag controller
+    zigTimer: 0,
+    zigInterval: 0,
+    targetVx: vx0,
+    hMin: baseHMin,
+    hMax: baseHMax,
+    accel: 480, // px/s^2 horizontal easing
+
+    // round-completion flag (escape or landed after shot)
+    done: false,
+  };
+
+  retargetZig(duck);
+  game.ducks.push(duck);
+}
+
+function retargetZig(d){
+  // New horizontal speed & direction, usually flipping side
+  const flip = Math.random() < 0.55 ? -1 : 1;
+  const mag = d.hMin + Math.random()*(d.hMax - d.hMin);
+  const propose = (Math.sign(d.vx) || 1) * flip * mag;
+  d.targetVx = propose;
+  d.mirror = d.targetVx>=0 ? 1 : -1;
+  d.zigInterval = 0.4 + Math.random()*0.9; // 0.4s–1.3s
+  d.zigTimer = d.zigInterval;
+}
+
+function updateDuck(d, dt){ // dt in seconds
+  if (!d) return;
+  if (d.alive) {
+    // Horizontal: ease toward targetVx; retarget on timer for zig-zag feel
+    d.zigTimer -= dt;
+    if (d.zigTimer <= 0) retargetZig(d);
+    const dvx = d.targetVx - d.vx;
+    const step = Math.sign(dvx) * Math.min(Math.abs(dvx), d.accel * dt);
+    d.vx += step;
+
+    // Vertical: steady upward with slight wobble
+    const wobble = Math.sin(d.wingTime*2.3) * 12; // small ±12 px/s
+    d.vy = -d.baseUp + wobble;
+
+    // Keep above foliage
+    if (d.y > canvas.height - 80) d.vy = Math.min(d.vy, -60);
+
+    // Integrate motion
+    d.x += d.vx * dt; d.y += d.vy * dt; d.wingTime += dt;
+
+    // Wall bounce—also flip target to keep the zig going
+    if (d.x < 40) { d.x = 40; d.vx = Math.abs(d.vx); d.targetVx = Math.abs(d.targetVx); d.mirror = 1; }
+    if (d.x > canvas.width-40) { d.x = canvas.width-40; d.vx = -Math.abs(d.vx); d.targetVx = -Math.abs(d.targetVx); d.mirror = -1; }
+
+    // Escape off the top
+    if (d.y < -30) {
+      d.alive = false; d.shot=false; d.done = true; game.ducksEscaped++; Audio.escape();
+      nextDuckOrRound();
+    }
+  } else if (d.shot && !d.done) {
+    // fall animation (simple gravity)
+    d.fallVy += 900 * dt; // px/s^2
+    d.y += d.fallVy * dt;
+    if (d.y > canvas.height - 32) { d.done = true; nextDuckOrRound(); }
+  }
+}
+
+
+  function nextDuckOrRound(){
+    if (game.ducksHit + game.ducksEscaped >= game.ducksThisRound) {
+      endRound();
+    }
+    updateHUD();
+  }
+
+  function shoot(mx, my){
+    if (game.state !== State.playing) return;
+    if (game.ammo <= 0) { Audio.empty(); return; }
+    game.ammo--; Audio.shot();
+
+    // Find the closest alive duck under the cursor within its hit radius
+    let best = null; let bestDist = Infinity;
+    for (const d of game.ducks) {
+      if (!d.alive) continue;
+      const dx = mx - d.x, dy = my - d.y;
+      const dist = Math.hypot(dx, dy);
+      if (dist <= d.r && dist < bestDist) { best = d; bestDist = dist; }
+    }
+
+    if (best) {
+      best.alive = false; best.shot = true; best.fallVy = 60; Audio.hit();
+      const headshot = bestDist <= best.headshotR;
+      const pts = headshot ? 500 : 200;
+      game.score += pts + Math.max(0, game.ammo)*20; // bonus per remaining ammo
+      game.ducksHit++;
+      floatingTexts.push({x:best.x, y:best.y-10, text: headshot?"HEADSHOT +"+pts:"HIT +"+pts, life:0.9});
+    } else {
+      recoil.bump();
+    }
+    updateHUD();
+  }
+
+  function updateHUD(){
+    scoreEl.textContent = String(game.score).padStart(6,'0');
+    roundEl.textContent = game.round;
+    ammoEl.textContent  = game.ammo;
+    ducksEl.textContent = `${game.ducksHit + game.ducksEscaped}/${game.ducksThisRound}`;
+  }
+
+  // ---------- Crosshair & effects ----------
+  const recoil = {
+    t:0,
+    bump(){ this.t = 0.12; },
+    update(dt){ this.t = Math.max(0, this.t - dt); },
+    strength(){ return this.t/0.12; }
+  };
+  const floatingTexts = [];
+
+  // ---------- Render ----------
+  function drawBackground(){
+    const g = ctx.createLinearGradient(0,0,0,canvas.height);
+    g.addColorStop(0, getCSS('--sky-2')); g.addColorStop(1, getCSS('--sky-1'));
+    ctx.fillStyle = g; ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    // distant clouds
+    ctx.globalAlpha = 0.25;
+    for (let i=0;i<6;i++) cloud( (i*220 + cloudSeed*37)%canvas.width, 90 + (i%3)*30, 60 + (i%4)*18 );
+    ctx.globalAlpha = 1;
+
+    // ground
+    ctx.fillStyle = getCSS('--ground');
+    ctx.fillRect(0, canvas.height-40, canvas.width, 40);
+
+    // bushes
+    for (let i=0;i<10;i++) bush(i*140 + (cloudSeed*0.6 % 140), canvas.height-40, 24 + (i%3)*10);
+  }
+
+  function cloud(x,y,r){
+    ctx.fillStyle = '#fff';
+    ellipse(x,y,r*1.2,r*0.6); ellipse(x-r*0.6,y+6,r*0.8,r*0.5); ellipse(x+r*0.7,y+4,r*0.9,r*0.5);
+  }
+  function bush(x,y,r){
+    ctx.fillStyle = '#1b5e20';
+    ellipse(x,y,r, r*0.7); ellipse(x-r*0.7,y+6,r*0.9,r*0.6); ellipse(x+r*0.7,y+4,r*0.9,r*0.6);
+    ctx.strokeStyle = 'rgba(0,0,0,.15)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(x, y, r, Math.PI, 2*Math.PI); ctx.stroke();
+  }
+  function ellipse(x,y,rx,ry){
+    ctx.beginPath();
+    for(let a=0;a<=Math.PI*2;a+=0.2){ const px=x+Math.cos(a)*rx, py=y+Math.sin(a)*ry; if(a===0)ctx.moveTo(px,py); else ctx.lineTo(px,py);} 
+    ctx.closePath(); ctx.fill();
+  }
+
+  function drawDuck(d){
+    // Three wing poses for a clearer flap: down / mid / up
+    const phase = Math.floor((d.wingTime * d.flapHz) % 3); // 0,1,2
+    const scale = 1.0;
+    ctx.save();
+    ctx.translate(d.x, d.y);
+    ctx.scale(d.mirror*scale, scale);
+
+    // body
+    ctx.fillStyle = '#6b4f2a'; // brown
+    roundedRect(-22, -12, 44, 24, 10);
+
+    // neck/head
+    ctx.fillStyle = '#2e7d32';
+    ctx.beginPath(); ctx.arc(20, -12, 10, 0, Math.PI*2); ctx.fill();
+    // beak
+    ctx.fillStyle = '#f59e0b';
+    ctx.beginPath(); ctx.moveTo(28,-10); ctx.lineTo(40,-6); ctx.lineTo(28,-2); ctx.closePath(); ctx.fill();
+    // eye
+    ctx.fillStyle = '#000'; ctx.beginPath(); ctx.arc(24,-13,2,0,Math.PI*2); ctx.fill();
+
+    // wings — draw both for fuller look
+    ctx.fillStyle = '#8b6a3a';
+    if (phase === 0) { // wings down
+      // left wing (behind body)
+      ctx.globalAlpha = 0.9;
+      ctx.beginPath(); ctx.ellipse(-6, 4, 20, 8, -0.2, 0, Math.PI*2); ctx.fill();
+      // right wing (front)
+      ctx.globalAlpha = 1;
+      ctx.beginPath(); ctx.ellipse(2, 6, 22, 9, 0.15, 0, Math.PI*2); ctx.fill();
+    } else if (phase === 1) { // mid
+      ctx.globalAlpha = 0.9;
+      ctx.beginPath(); ctx.ellipse(-6, -4, 18, 10, 0.0, 0, Math.PI*2); ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.beginPath(); ctx.ellipse(0, -2, 20, 11, 0.1, 0, Math.PI*2); ctx.fill();
+    } else { // wings up
+      ctx.globalAlpha = 0.9;
+      ctx.beginPath(); ctx.ellipse(-10, -18, 10, 22, -0.6, 0, Math.PI*2); ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.beginPath(); ctx.ellipse(6, -20, 10, 24, 0.6, 0, Math.PI*2); ctx.fill();
+    }
+
+    // subtle body outline
+    ctx.globalAlpha = 1; ctx.strokeStyle = 'rgba(0,0,0,.25)'; ctx.lineWidth = 2; ctx.strokeRect(-22,-12,44,24);
+
+    // // hit radii debug
+    // ctx.globalAlpha=.15; ctx.fillStyle='#00f'; ctx.beginPath(); ctx.arc(0,0,d.r,0,Math.PI*2); ctx.fill(); ctx.fillStyle='#f00'; ctx.beginPath(); ctx.arc(20,-12,d.headshotR,0,Math.PI*2); ctx.fill(); ctx.globalAlpha=1;
+
+    ctx.restore();
+  }
+
+  function roundedRect(x,y,w,h,r){
+    ctx.beginPath();
+    ctx.moveTo(x+r,y);
+    ctx.arcTo(x+w,y,x+w,y+h,r);
+    ctx.arcTo(x+w,y+h,x,y+h,r);
+    ctx.arcTo(x,y+h,x,y,r);
+    ctx.arcTo(x,y,x+w,y,r);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  function drawCrosshair(){
+    const {x,y} = game.cross;
+    const recoilK = recoil.strength();
+    const sz = 16 + recoilK*8;
+    ctx.save();
+    ctx.translate(x,y);
+    ctx.globalAlpha = 0.9;
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(0,0, sz, 0, Math.PI*2);
+    ctx.moveTo(-sz-6,0); ctx.lineTo(-4,0);
+    ctx.moveTo(sz+6,0); ctx.lineTo(4,0);
+    ctx.moveTo(0,-sz-6); ctx.lineTo(0,-4);
+    ctx.moveTo(0,sz+6); ctx.lineTo(0,4);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawTexts(dt){ // dt in seconds
+    for (let i=floatingTexts.length-1;i>=0;i--){
+      const ft = floatingTexts[i];
+      ft.life -= dt; ft.y -= 20 * dt; if (ft.life<=0) floatingTexts.splice(i,1);
+      ctx.save(); ctx.globalAlpha = Math.max(0, Math.min(1, ft.life/0.9));
+      ctx.font = 'bold 20px system-ui'; ctx.fillStyle = '#fff'; ctx.strokeStyle='rgba(0,0,0,.35)'; ctx.lineWidth=4;
+      ctx.strokeText(ft.text, ft.x-40, ft.y);
+      ctx.fillText(ft.text, ft.x-40, ft.y);
+      ctx.restore();
+    }
+  }
+
+  // ---------- Main loop ----------
+  let cloudSeed = 0;
+  function loop(t){
+    if (!game) return requestAnimationFrame(loop);
+    const now = t; const dt = (now - game.lastTime) / 1000; game.lastTime = now; // seconds
+
+    // logic
+    if (game.state === State.playing) {
+      for (const d of game.ducks) updateDuck(d, dt);
+      recoil.update(dt);
+    }
+    cloudSeed += dt * 20;
+
+    // render
+    ctx.clearRect(0,0,canvas.width, canvas.height);
+    drawBackground();
+
+    for (const d of game.ducks) { if (!d.done || d.shot) drawDuck(d); }
+
+    drawTexts(dt);
+
+    if (game.state === State.menu) drawBanner('Click ▶ Start to play');
+    if (game.state === State.roundOver) drawBanner(`Round ${game.round-1} complete!`);
+    if (game.state === State.gameOver) drawBanner('Game Over');
+
+    drawCrosshair();
+
+    requestAnimationFrame(loop);
+  }
+
+  function drawBanner(text){
+    ctx.save();
+    const w = canvas.width, h = canvas.height;
+    ctx.globalAlpha = .85; ctx.fillStyle = 'rgba(0,0,0,.35)'; ctx.fillRect(w*0.18, h*0.38, w*0.64, 100);
+    ctx.globalAlpha = 1; ctx.strokeStyle='rgba(255,255,255,.15)'; ctx.strokeRect(w*0.18, h*0.38, w*0.64, 100);
+    ctx.font = '700 36px system-ui'; ctx.textAlign='center'; ctx.fillStyle = '#e6edf3';
+    ctx.fillText(text, w/2, h/2 + 12);
+    ctx.restore();
+  }
+
+  function getCSS(varName){
+    return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+  }
+
+  // ---------- Events ----------
+  canvas.addEventListener('mousemove', (e)=>{
+    const rect = canvas.getBoundingClientRect();
+    const mx = (e.clientX - rect.left) * (canvas.width / rect.width);
+    const my = (e.clientY - rect.top)  * (canvas.height / rect.height);
+    game.cross.x = mx; game.cross.y = my;
+  });
+
+  canvas.addEventListener('mousedown', (e)=>{
+    if (Audio.ctx.state !== 'running') { Audio.ctx.resume && Audio.ctx.resume(); }
+    const rect = canvas.getBoundingClientRect();
+    const mx = (e.clientX - rect.left) * (canvas.width / rect.width);
+    const my = (e.clientY - rect.top)  * (canvas.height / rect.height);
+    shoot(mx, my);
+  });
+
+  startBtn.addEventListener('click', ()=>{
+    if (!game || game.state===State.menu || game.state===State.gameOver) {
+      newGame();
+      startRound();
+    }
+  });
+
+  stopBtn.addEventListener('click', ()=>{
+    if (!game) return;
+      // Reset back to main menu and clear active round
+      newGame();             // reinitialize state & HUD
+      game.state = State.menu;
+  });
+
+  // ---------- Self-tests (console only) ----------
+  (function runTests(){
+    const results = [];
+    function ok(name, pass, msg=""){ results.push({name, pass, msg}); if(!pass) console.error(`[TEST FAIL] ${name}: ${msg}`); else console.log(`[TEST PASS] ${name}`); }
+
+    try { ok('updateDuck exists', typeof updateDuck === 'function'); } catch(e){ ok('updateDuck exists', false, e.message); }
+
+    try {
+      newGame(); startRound();
+      const first = game.ducks[0];
+      const before = { x: first.x, y: first.y, t: first.wingTime, vx: first.vx };
+      // simulate ~2 seconds to allow zig-zag retargets
+      for (let i=0;i<120;i++) {
+        for (const d of game.ducks) updateDuck(d, 1/60);
+      }
+      const after = { x: first.x, y: first.y, t: first.wingTime, vx: first.vx };
+      ok('advances time', after.t > before.t);
+      ok('moved upward overall', after.y < before.y);
+      ok('horizontal changed (zig-zag)', Math.abs(after.vx - before.vx) > 1);
+      if (first) { drawDuck(first); ok('rendered without error', true); }
+    } catch(e){ ok('simulation/render', false, e.message); }
+
+    const passed = results.filter(r=>r.pass).length; const total = results.length;
+    console.log(`DuckHunt self-test: ${passed}/${total} passed`);
+  })();
+
+  // ---------- Boot ----------
+  newGame();
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
