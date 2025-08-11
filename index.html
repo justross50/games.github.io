@@ -28,7 +28,9 @@
     .btn{ background:linear-gradient(180deg, #1f2937, #111827); border:1px solid #2b384a; border-radius:12px; padding:10px 14px; color:var(--text); font-weight:700; letter-spacing:.3px; cursor:pointer; user-select:none; transition: transform .06s ease, box-shadow .2s ease, border-color .2s ease; }
     .btn:hover{ transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,0,0,.35); border-color:#3b4f6a }
     .btn:active{ transform: translateY(0) scale(.99)}
-    canvas { width: min(100%, 1100px); aspect-ratio: 16/9; background: #000; border-radius: 16px; border:1px solid #273241; box-shadow: 0 12px 40px rgba(0,0,0,.45); cursor: none; }
+    canvas { width: min(100%, 1100px); aspect-ratio: 16/9; background: #000; border-radius: 16px; border:1px solid #273241; box-shadow: 0 12px 40px rgba(0,0,0,.45); cursor: none;
+      touch-action: none;
+    }
     .help{ width:min(100%,1100px); display:grid; grid-template-columns:1fr; gap:10px; color:#a8b3c6; font-size:.95rem; line-height:1.45; }
     .kbd{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; background:#0a0f15; border:1px solid #223044; padding:2px 6px; border-radius:6px;}
     .badge{border:1px solid #2b384a; padding:2px 8px; border-radius:999px; background:#0b1017; font-weight:700}
@@ -77,6 +79,31 @@
   const ducksEl = document.getElementById('ducks');
   const startBtn = document.getElementById('startBtn');
   const stopBtn  = document.getElementById('stopBtn');
+
+  // ---------- Responsive canvas (mobile/retina) ----------
+  function fitCanvasToCSS() {
+    // Size the backing store to match the displayed size * devicePixelRatio
+    const rect = canvas.getBoundingClientRect();
+    const dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 2)); // cap DPR for perf
+    // Maintain 16:9 height based on actual CSS width
+    const cssW = rect.width;
+    const cssH = cssW * 9 / 16;
+    // Only update if changed to avoid clearing each frame
+    const targetW = Math.round(cssW * dpr);
+    const targetH = Math.round(cssH * dpr);
+    if (canvas.width !== targetW || canvas.height !== targetH) {
+      canvas.width = targetW;
+      canvas.height = targetH;
+    }
+  }
+
+  // Use ResizeObserver so it reacts to container changes, not just window resizes
+  const ro = new ResizeObserver(() => fitCanvasToCSS());
+  ro.observe(canvas);
+  window.addEventListener('orientationchange', fitCanvasToCSS);
+  window.addEventListener('resize', fitCanvasToCSS);
+  // Initial fit
+  fitCanvasToCSS();
 
   // ---------- Audio (WebAudio minimal, no external files) ----------
   const Audio = (() => {
@@ -423,6 +450,8 @@ function updateDuck(d, dt){ // dt in seconds
   let cloudSeed = 0;
   function loop(t){
     if (!game) return requestAnimationFrame(loop);
+    // keep backing store in sync with CSS pixels
+    fitCanvasToCSS();
     const now = t; const dt = (now - game.lastTime) / 1000; game.lastTime = now; // seconds
 
     // logic
@@ -433,6 +462,7 @@ function updateDuck(d, dt){ // dt in seconds
     cloudSeed += dt * 20;
 
     // render
+    ctx.setTransform(1,0,0,1,0,0);
     ctx.clearRect(0,0,canvas.width, canvas.height);
     drawBackground();
 
@@ -478,6 +508,32 @@ function updateDuck(d, dt){ // dt in seconds
     const my = (e.clientY - rect.top)  * (canvas.height / rect.height);
     shoot(mx, my);
   });
+
+  // Touch support (tap to shoot, drag to move crosshair)
+  canvas.addEventListener('touchstart', (e) => {
+    if (Audio.ctx.state !== 'running') { Audio.ctx.resume && Audio.ctx.resume(); }
+    const rect = canvas.getBoundingClientRect();
+    const t = e.changedTouches[0];
+    const mx = (t.clientX - rect.left) * (canvas.width / rect.width);
+    const my = (t.clientY - rect.top)  * (canvas.height / rect.height);
+    game.cross.x = mx; game.cross.y = my;
+    shoot(mx, my);
+    e.preventDefault();
+  }, { passive: false });
+
+  canvas.addEventListener('touchmove', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const t = e.changedTouches[0];
+    const mx = (t.clientX - rect.left) * (canvas.width / rect.width);
+    const my = (t.clientY - rect.top)  * (canvas.height / rect.height);
+    game.cross.x = mx; game.cross.y = my;
+    e.preventDefault();
+  }, { passive: false });
+
+  canvas.addEventListener('touchend', (e) => {
+    // no-op; tap shoots on touchstart
+    e.preventDefault();
+  }, { passive: false });
 
   startBtn.addEventListener('click', ()=>{
     if (!game || game.state===State.menu || game.state===State.gameOver) {
