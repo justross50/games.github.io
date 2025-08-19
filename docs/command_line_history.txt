@@ -1,0 +1,356 @@
+mkdir wheels_2024_10_10
+cd .\wheels_2024_10_10\
+pip download nltk spacy lanchain unstructured['all-docs']
+pip download unstructured['all-docs']
+pip download langchain
+pip download ollama openai
+pip install unstructured['all-docs'] --no-index --find-links=.
+python
+python.exe
+C:/ProgramData/miniconda3/Scripts/activate
+conda activate base
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/pyqt_app_example.py"
+python
+C:/ProgramData/miniconda3/python.exe
+python
+cd 
+cd 'C:\Users\1274810862A\Downloads\standard_wheels\standard_wheels'
+pip install *.whl
+pip install --no-index --find-links =. *
+pip install --no-index --find-links =. .\numpy-2.1.2-cp311-cp311-win_amd64.whl
+pip install --no-index --find-links =. pandas
+pip install --no-index --find-links =. .\pandas-2.2.3-cp311-cp311-win_amd64.whl
+pip install --no-index --find-links = .\matplotlib-3.9.2-cp311-cp311-win_amd64.whl
+pip install --no-index --find-links =. \matplotlib-3.9.2-cp311-cp311-win_amd64.whl
+pip install --no-index --find-links =. .\matplotlib-3.9.2-cp311-cp311-win_amd64.whl
+pip install --user --no-index --find-links =. .\pandas-2.2.3-cp311-cp311-win_amd64.whl
+python --version
+pip list
+C:/ProgramData/miniconda3/Scripts/activate
+conda activate base
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/test.py"
+& C:/ProgramData/miniconda3/python.exe list
+& C:/ProgramData/miniconda3/python.exe python list
+pip install pip
+& C:/ProgramData/miniconda3/python.exe --version
+& C:/ProgramData/miniconda3/Scripts/pip.exe upgrade pip
+& C:/ProgramData/miniconda3/Scripts/pip.exe install pandas
+clear
+& C:/ProgramData/miniconda3/Scripts/pip.exe install unstructured['all-docs']
+cd 'C:\Users\1274810862A\OneDrive - United States Air Force\bin\wheels'
+& C:/ProgramData/miniconda3/Scripts/pip.exe download unstructured['all-docs']
+& C:/ProgramData/miniconda3/Scripts/pip.exe list
+C:/ProgramData/miniconda3/Scripts/pip.exe install glob pandas numpy datetime matplotlib sciki-learn scipy seaborn os re json xml warnings shutil stypestkinter
+C:/ProgramData/miniconda3/Scripts/pip.exe install globs pandas numpy datetime matplotlib sciki-learn scipy seaborn os re json xml warnings shutil stypestkinter
+C:/ProgramData/miniconda3/Scripts/pip.exe install pandas numpy datetime matplotlib sciki-learn scipy seaborn os re json xml warnings shutil stypestkinter
+C:/ProgramData/miniconda3/Scripts/pip.exe install pandas numpy datetime matplotlib scikit-learn scipy seaborn os re json xml warnings shutil stypestkinter
+& C:/ProgramData/miniconda3/python.exe 
+C:/ProgramData/miniconda3/Scripts/pip.exe install pandas numpy datetime matplotlib scikit-learn scipy seaborn
+C:/ProgramData/miniconda3/Scripts/pip.exe download pandas numpy datetime matplotlib scikit-learn scipy seaborn
+C:/ProgramData/miniconda3/Scripts/pip.exe download pandas numpy datetime matplotlib scikit-learn scipy seaborn --only-binar=:all:
+& C:/ProgramData/miniconda3/python.exe 
+ C:\ProgramData\miniconda3\Scripts\activate.bat
+python
+& python c:\Users\1274810862A\.vscode\extensions\ms-python.python-2024.16.0-win32-x64\python_files\printEnvVariablesToFile.py c:\Users\1274810862A\.vscode\extensions\ms-python.python-2024.16.0-win32-x64\python_files\deactivate\powershell\envVars.txt
+cd wheels
+ls
+C:/ProgramData/miniconda3/Scripts/pip.exe download docx
+C:/ProgramData/miniconda3/Scripts/pip.exe install docx
+C:/ProgramData/miniconda3/Scripts/pip.exe download pypdf
+C:/ProgramData/miniconda3/Scripts/pip.exe install pypdf
+cd openai
+C:/ProgramData/miniconda3/Scripts/pip.exe download openai
+C:/ProgramData/miniconda3/Scripts/pip.exe install openai
+python
+pip list
+& python c:\Users\1274810862A\.vscode\extensions\ms-python.python-2024.16.0-win32-x64\python_files\printEnvVariablesToFile.py c:\Users\1274810862A\.vscode\extensions\ms-python.python-2024.16.0-win32-x64\python_files\deactivate\powershell\envVars.txt
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART_summarization_pipeline.py"
+python
+ls
+cd wheels
+pip download spacy
+pip install spacy
+python
+python -m spacy download en_core_web_sm
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART_summarization_pipeline.py"
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART_summarization_pipeline_2-0.py"
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART_summarization_pipeline_3-0.py"
+python
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART_summarization_pipeline_3-0.py"
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART_summarization_pipeline_2-0.py"
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART_summarization_pipeline_3-0.py"
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/test.py"
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART_summarization_pipeline_3_1.py"
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART/DART_Benchmark_LLMT_Parsing_v5.py"
+clear
+python
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART/test_import_many_documents.py"
+pip install libmagic
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART/test_import_many_documents.py"
+pip install unstructured
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART/test_import_many_documents.py"
+pip install lib
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART/test_import_many_documents.py"
+pip uninstall python-magic`
+pip install python-magic-bin
+python
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART/test_import_many_documents.py"
+pip uninstall onnx onnxruntime`
+pip install onnx onnxruntime`
+
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART/test_import_many_documents.py"
+conda create -n onnx_env python=3.10`
+conda activate onnx_env
+conda activate onnx_env
+pip install onnx onnxruntime unstructured
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART/test_import_many_documents.py"
+conda activate onnx_env
+C:\Users\1274810862A\.conda\envs\onnx_env\python.exe
+"C:\Users\1274810862A\.conda\envs\onnx_env\Scripts\pip.exe"
+"C:\Users\1274810862A\.conda\envs\onnx_env\Scripts\pip.exe" install unstructured
+C:\Users\1274810862A\.conda\envs\onnx_env\Scripts\pip.exe install unstructured
+C:\Users\1274810862A\.conda\envs\onnx_env\python.exe
+C:\Users\1274810862A\.conda\envs\onnx_env\Scripts\pip.exe install scikit-learn nltk spacy numpy networkx
+python --version
+& c:/Users/1274810862A/.conda/envs/onnx_env/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART/DART_summarization_pipeline_3_1.py"
+& c:/Users/1274810862A/.conda/envs/onnx_env/python.exe -m spacy download en_corew_web_sm
+& c:/Users/1274810862A/.conda/envs/onnx_env/python.exe -m spacy download en_core_web_sm
+& c:/Users/1274810862A/.conda/envs/onnx_env/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART/DART_summarization_pipeline_3_1.py"
+& c:/Users/1274810862A/.conda/envs/onnx_env/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART/test_import_many_documents.py"
+C:\Users\1274810862A\.conda\envs\onnx_env\Scripts\pip.exe install pandas
+& c:/Users/1274810862A/.conda/envs/onnx_env/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART/test_import_many_documents.py"
+C:\Users\1274810862A\.conda\envs\onnx_env\Scripts\pip.exe list
+pip uninstall unstructured
+unstructured = { extras = ["all-docs"], version = "^0.15.0", optional = true }
+pip install unstructured = { extras = ["all-docs"], version = "^0.15.0", optional = true }
+pip install unstructured --version = "^0.15.0"
+pip install unstructured --version == "^0.15.0"
+pip install unstructured==0.15.0
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART/test_import_many_documents.py"
+pip install pillow_heif
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART/test_import_many_documents.py"
+python
+pip install pptx
+python --version
+pip install python-pptx
+python
+pip install pypdf2
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART/test_import_many_documents.py"
+pip download pypdf2
+clear
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART/test_import_many_documents.py"
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART/DART_Import_Files.py"
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART/DART_Backend.py"
+clear
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART/DART_Backend.py"
+python
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART/DART_Backend.py"
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART/DART_summarization_pipeline_3_1.py"
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART/DART_Backend.py"
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART/DART_Import_Files.py"
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART/temp_DART_Backend.py"
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/DART/DART_Backend.py"
+python --version
+cd 'C:\Users\1274810862A\Downloads\jupyter'
+cd .\standard_wheels\
+pip install --no-index --find-links=. .\jupyter-1.1.1-py2.py3-none-any.whl
+python jupyter
+jupyter notebook
+conda install jupyter
+jupyter notebook
+cd C:\Users\1274810862A\AppData\Roaming\Python\Python311\Scripts
+jupyter notebook
+cd "C:\Users\1274810862A\AppData\Roaming\Python\Python311\Scripts"
+cd ~
+ls
+cd bin
+cd "C:\Users\1274810862A\OneDrive - United States Air Force\bin"
+C:\Users\1274810862A\AppData\Roaming\Python\Python311\Scripts jupyter notebook
+C:\Users\1274810862A\AppData\Roaming\Python\Python311\Scripts\jupyter.exe notebook
+C:\Users\1274810862A\AppData\Roaming\Python\Python311\Scripts\jupyter.exe
+jupyter notebook
+C:\Users\1274810862A\AppData\Roaming\Python\Python311\Scripts\jupyter.exe jupyter notebook
+C:\Users\1274810862A\AppData\Roaming\Python\Python311\Scripts\jupyter.exe notebook
+cd C:\Users\1274810862A\AppData\Roaming\Python\Python311\Scripts\
+jupyter notebook
+C:\Users\1274810862A\AppData\Roaming\Python\Python311\Scripts\jupyter.exe -notebook
+C:\Users\1274810862A\AppData\Roaming\Python\Python311\Scripts\jupyter.exe --cong-dir
+C:\Users\1274810862A\AppData\Roaming\Python\Python311\Scripts\jupyter.exe --version
+C:\Users\1274810862A\AppData\Roaming\Python\Python311\Scripts\jupyter.exe --help
+C:\Users\1274810862A\AppData\Roaming\Python\Python311\Scripts\jupyter.exe -help
+C:\Users\1274810862A\AppData\Roaming\Python\Python311\Scripts\jupyter-notebook.exe
+& C:/ProgramData/miniconda3/python.exe "c:/Users/1274810862A/OneDrive - United States Air Force/bin/PYTHON/AFIT/DASC 511 (Python)/CODE/week5/uml_class_diagrams.py"
+& python c:\Users\1274810862A\.vscode\extensions\ms-python.python-2024.16.1-win32-x64\python_files\printEnvVariablesToFile.py c:\Users\1274810862A\.vscode\extensions\ms-python.python-2024.16.1-win32-x64\python_files\deactivate\powershell\envVars.txt
+& python c:\Users\1274810862A\.vscode\extensions\ms-python.python-2024.18.0-win32-x64\python_files\printEnvVariablesToFile.py c:\Users\1274810862A\.vscode\extensions\ms-python.python-2024.18.0-win32-x64\python_files\deactivate\powershell\envVars.txt
+pip install --upgrade transformers
+cd 'C:\Users\1274810862A\Downloads\wheels_2024_11'
+python --version
+pip download transformers
+pip download torch
+pip download sumy
+pip download nltk
+pip download gensim yake fpdf
+pip download scikit-learn
+cd ..
+cd .\conda_env\
+mkdir offline_conda_packages
+cd offline_conda_packages
+conda install --download-only -p ./offline_conda_packages torch
+conda create -n my_env python=3.10 --offline
+conda activate my_env
+cd "C:\Users\1274810862A\Downloads\wheels_2024_11"
+pip install .\torch-2.5.1-cp310-cp310-win_amd64.whl --no-index --find-links=.
+pip install .\sumy-0.11.0-py2.py3-none-any.whl
+pip install .\nltk-3.9.1-py3-none-any.whl --no-index --find-links=.
+python
+pip install .\numpy-1.26.4-cp310-cp310-win_amd64.whl
+python
+conda activate my_env
+cd "C:\Users\1274810862A\Downloads\wheels_2024_11"
+pip download langchain
+pip download spacy
+conda activate my_env
+cd '\\Vdyd-fs-042v\amc-a9\VEJX-AMCA9-G\Working\IT Support Info\A9 Std Command PE environment\Anaconda\A9_Standard_Python_Environment_Mar_2024 (pip)'
+python .\auto_install_wheels.py
+python
+cd '\\Vdyd-fs-042v\amc-a9\VEJX-AMCA9-G\Working\IT Support Info\A9 Std Command PE environment\Anaconda\A9_Standard_Python_Environment_Mar_2024 (pip)'
+cd '\\Vdyd-fs-042v\amc-a9\VEJX-AMCA9-G\Working\IT Support Info\A9 Std Command PE environment\Anaconda\A9_Standard_Python_Environment (pip)\Python_3_10_windows_cpu (2024_11)'
+python .\auto_install_wheels.py
+python
+python .\auto_install_wheels.py
+cd wheels
+pip install .\fpdf-1.7.2.tar.gz
+cd ..
+python .\auto_install_wheels.py
+& python c:\Users\1274810862A\.vscode\extensions\ms-python.python-2024.20.0-win32-x64\python_files\printEnvVariablesToFile.py c:\Users\1274810862A\.vscode\extensions\ms-python.python-2024.20.0-win32-x64\python_files\deactivate\powershell\envVars.txt
+cd "\\Vdyd-fs-042v\amc-a9\VEJX-AMCA9-G\Working\IT Support Info\A9 Std Command PE environment\Anaconda\A9_Standard_Python_Environment (pip)\Archive"
+pip install .\openai-1.13.3-py3-none-any.whl --in-index --find-links=.
+pip install .\openai-1.13.3-py3-none-any.whl --no-index --find-links=.
+mkdir .ssh\\pegasus
+cd "C:\Users\1274810862A\OneDrive - United States Air Force\bin\wheels\Python_3_10_win_wheels_2024_11"
+pip download ollama
+pip download Rake_nltk
+pip download scipy
+pip download scikit-learn
+cd "\\Vdyd-fs-042v\amc-a9\VEJX-AMCA9-G\Working\IT Support Info\A9 Std Command PE environment\Anaconda\A9_Standard_Python_Environment (pip)\Python_3_10_windows_cpu (2024_11)"
+python .\auto_install_wheels.py
+python
+conda activate my_env
+python
+cd "C:\Users\1274810862A\OneDrive - United States Air Force\bin\PYTHON\wheels\unstructured"
+pip install .\pdf2image-1.17.0-py3-none-any.whl --no-index --find-links=.
+cd "C:\Users\1274810862A\OneDrive - United States Air Force\bin\PYTHON\Python_Packages\02_Individual_Package_Sets\Unstructured"
+pip install .\pdf2image-1.17.0-py3-none-any.whl --no-index --find-links=.
+pip install --no-index --find-links=. .\pdfplumber-0.10.2-py3-none-any.whl
+python
+cd "C:\Users\1274810862A\OneDrive - United States Air Force\bin\PYTHON\wheels\other"
+pip install .\python_docx-1.1.2-py3-none-any.whl
+spyder
+cd 'C:\Users\1274810862A\OneDrive - United States Air Force\bin\PYTHON\wheels\Python_3_10_win_wheels_2024_11'
+python .\auto_install_wheels.py
+cd "\\Vdyd-fs-042v\amc-a9\VEJX-AMCA9-G\Working\IT Support Info\A9 Std Command PE environment\Anaconda\A9_Standard_Python_Environment (pip)\Python_3_10_windows_cpu (2024_11)"
+python .\auto_install_wheels.py
+& python c:\Users\1274810862A\.vscode\extensions\ms-python.python-2024.20.0-win32-x64\python_files\printEnvVariablesToFile.py c:\Users\1274810862A\.vscode\extensions\ms-python.python-2024.20.0-win32-x64\python_files\deactivate\powershell\envVars.txt
+ollama run llama3.2
+conda create --name beagle
+conda create --name beagle python=3.10
+conda activate beagle
+cd bin
+cd "C:\Users\1274810862A\OneDrive - United States Air Force\bin\beagle-main\beagle-main"
+mkdir wheels`
+pip download -r requirements.txt -d wheels
+pip install --no-index --find-links=wheels -r requirements.txt
+& python c:\Users\1274810862A\.vscode\extensions\ms-python.python-2024.22.1-win32-x64\python_files\printEnvVariablesToFile.py c:\Users\1274810862A\.vscode\extensions\ms-python.python-2024.22.1-win32-x64\python_files\deactivate\powershell\envVars.txt
+python .\BEAGLE.py
+cd "C:\Users\1274810862A\OneDrive - United States Air Force\bin\beagle-main\beagle-main"
+ls
+conda activate beagle
+python .\BEAGLE.py
+conda create --name beagle_311 python=3.11
+conda activate beagle_311
+cd "C:\Users\1274810862A\OneDrive - United States Air Force\bin\beagle-main\beagle-main"
+mkdir wheels`
+pip download -r requirements.txt -d wheels
+conda activate beagle
+spyder
+conda create --name my_env_311 python=3.11
+conda activate beagle_311
+conda list --explicit > my_env.txt
+cd "\\Vdyd-fs-042v\amc-a9\VEJX-AMCA9-G\Working\IT Support Info\A9 Std Command PE environment"
+cd "\\Vdyd-fs-042v\amc-a9\VEJX-AMCA9-G\IT Support\Software\Anaconda\Python_Packages_A9_2025_01_29"
+ls
+pip install --no-index --find-links=wheels_310 -r requirements.txt    
+cd C:\Users\1274810862A\OneDrive - United States Air Force\bin\beagle-main\beagle-main
+cd "C:\Users\1274810862A\OneDrive - United States Air Force\bin\beagle-main\beagle-main"
+ls
+pip install --no-index --find-links=wheels_310 -r requirements.txt
+ollama pull smollm2
+ollama list
+python
+& python c:\Users\1274810862A\.vscode\extensions\ms-python.python-2025.0.0-win32-x64\python_files\printEnvVariablesToFile.py c:\Users\1274810862A\.vscode\extensions\ms-python.python-2025.0.0-win32-x64\python_files\deactivate\powershell\envVars.txt
+ollama list
+ollama run smollm2
+ollama pull all-minilm
+ollama list
+cd "C:\Users\1274810862A\Downloads\beagle-justin\beagle-justin"
+python .\run_beagle_gui.py
+ollama list
+python .\run_beagle_gui.py
+docker run -d -p 3010:11434 --name ollama ollama/ollama:latest
+python --version
+conda create --name experimental python=3.12
+pip install open-webui
+conda activate experimental
+pip install open-webui
+docker run -d -p 3010:11434 --name ollama ollama/ollama:latest
+docker pull ollama/ollama:latest
+ollama list
+ollama run phi4-mini-reasoning
+ls
+cd .ollama
+ollama list
+ollama run gemma3n
+python --version
+pip install spyder
+mkdir python312_wheels
+cd .\python312_wheels\
+pip download spyder
+spyder
+jupyter notebook
+pip install jupyter
+pip download jupyter
+jupyter notebook
+pip download pandas openpyxl python-docx
+pip download python-pptx pypdf2 requests sentence-transformers ollama
+pip install pandas openpyxl python-docx
+pip install python-pptx pypdf2 requests sentence-transformers ollama
+pip download open-webui
+pip install open-webui
+open-webui serve
+docker run -d -p 3000:8080 --add-host=host.docker.internal:host-gateway -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:main
+cd ..
+mkdir python311_wheels
+conda create --name py311 python=3.11
+cd .\python311_wheels\
+conda activate py311
+pip install open-webui
+open-webui serve
+spyder
+which python
+python
+jupyter notebook
+conda env list
+python.version
+python
+cd "C:\Users\1274810862A\OneDrive - United States Air Force\bin\PYTHON\python312_wheels"
+pip install --no-index --find-links=. spyder
+cd ~
+spyder
+ollama run gemma3n:e2b
+pip install asksageclient
+python
+spyder
+history
+history 100
+Get-History
+(Get-PSReadlineOption).HistorySavePath
